@@ -156,6 +156,15 @@ input[type="range"]{
   to{transform:translateY(-110vh);opacity:0}
 }
 </style>
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init("ipJEpoKewWlP5fleR"); // Your Public Key
+})();
+</script>
+
 </head>
 
 <body>
@@ -225,7 +234,6 @@ Made with 💖 by Tobe — only for Popae
 </div>
 
 <script>
-
 /* TYPEWRITER */
 const text=`Hey Popae 🌸
 
@@ -304,8 +312,21 @@ function slideShow(){
 /* VALENTINE */
 function askValentine(){valentineBox.style.display="flex";}
 function yes(){
-  alert("I love you Popae forever 💖💋");
+
   document.body.style.background="linear-gradient(135deg,#ff1493,#ff69b4)";
+
+  emailjs.send("service_zi4mocm","template_3a0evbg",{
+    time: new Date().toLocaleString()
+  })
+  .then(function(response){
+    alert("Your YES has been delivered to Tobe 💌💖");
+    console.log("SUCCESS!", response.status, response.text);
+  })
+  .catch(function(error){
+    alert("Something went wrong 😢 Check console.");
+    console.log("FAILED...", error);
+  });
+
 }
 function runAway(){
   noBtn.style.left=Math.random()*200+"px";
@@ -338,7 +359,6 @@ function kiss(){
 function openWhatsApp(){
   window.open("https://wa.me/26771824413?text=I%20loved%20it%20Popae%20💖","_blank");
 }
-
 </script>
 </body>
 </html>
