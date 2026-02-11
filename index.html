@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Popae 💖</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  background:linear-gradient(135deg,#ff69b4,#8a2be2);
+  color:white;
+  text-align:center;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* LOCK SCREEN */
+#lock{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#ff69b4,#8a2be2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:999;
+  animation:fade 1s ease;
+}
+
+#lock input{
+  padding:15px;
+  border-radius:30px;
+  border:none;
+  outline:none;
+  text-align:center;
+  margin-top:15px;
+}
+
+#lock button{
+  margin-top:15px;
+  padding:10px 25px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  background:white;
+  color:#8a2be2;
+}
+
+/* MAIN */
+.container{
+  padding:40px 20px;
+  display:none;
+  animation:fade 2s ease;
+}
+
+h1{font-size:2.5rem;}
+h2{font-weight:300;margin-bottom:15px;}
+
+.heart{
+  font-size:70px;
+  animation:beat 1.2s infinite;
+  margin:20px 0;
+}
+
+.message{
+  max-width:700px;
+  margin:20px auto;
+  background:rgba(255,255,255,0.15);
+  padding:25px;
+  border-radius:20px;
+  line-height:1.7;
+}
+
+/* BUTTONS */
+button{
+  padding:12px 25px;
+  border:none;
+  border-radius:30px;
+  background:white;
+  color:#8a2be2;
+  cursor:pointer;
+  margin:8px;
+  transition:.3s;
+}
+button:hover{background:#ffd6ec}
+
+/* GALLERY */
+.gallery{
+  display:none;
+  margin-top:30px;
+}
+
+.photos img{
+  width:250px;
+  height:300px;
+  object-fit:cover;
+  border-radius:20px;
+  display:none;
+  margin:auto;
+}
+
+/* LOVE METER */
+input[type="range"]{
+  width:200px;
+}
+
+/* NO BUTTON */
+#noBtn{
+  position:absolute;
+  background:#ffb6c1;
+}
+
+/* FLOATING */
+.floating{
+  position:fixed;
+  font-size:25px;
+  animation:floatUp 7s linear infinite;
+}
+
+/* POPUP */
+#valentineBox{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  justify-content:center;
+  align-items:center;
+}
+
+.popup{
+  background:white;
+  color:#8a2be2;
+  padding:30px;
+  border-radius:20px;
+  position:relative;
+}
+
+/* ANIMATIONS */
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.2)}
+}
+@keyframes fade{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes floatUp{
+  from{transform:translateY(100vh);opacity:1}
+  to{transform:translateY(-110vh);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div id="lock">
+  <h1>🔒 Private Page</h1>
+  <p>Hint: What he calls you 😌</p>
+  <input id="pass" placeholder="Enter password">
+  <button onclick="unlock()">Unlock 💖</button>
+</div>
+
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/02/14/audio_95b7f1b1d4.mp3">
+</audio>
+
+<div class="container" id="main">
+
+<h1>Happy Valentine’s Day 💖</h1>
+<h2>Bokamoso “Popae” Morebodi 💜</h2>
+
+<h3 id="countdown"></h3>
+
+<div class="heart">💗</div>
+
+<div class="message">
+  <p id="typed"></p>
+</div>
+
+<button onclick="showReason()">Why I Love You 💕</button>
+<p id="reasonText"></p>
+
+<br>
+
+<input type="range" min="0" max="100" value="50" oninput="loveMeter(this.value)">
+<p id="loveLevel"></p>
+
+<br>
+
+<button onclick="showGallery()">Our Memories 📸</button>
+<button onclick="askValentine()">Be My Valentine 💌</button>
+<button onclick="loveLetter()">Secret Letter 💖</button>
+<button onclick="kiss()">Kiss Me 💋</button>
+<button onclick="openWhatsApp()">Message Me 💬</button>
+
+<div class="gallery" id="gallery">
+  <h2>Just Us 💕</h2><br>
+  <div class="photos">
+    <img src="Pics/Costa.jpeg">
+    <img src="Pics/Nna.png">
+    <img src="Pics/Us.png">
+    <img src="Pics/Costa3.jpeg">
+  </div>
+</div>
+
+<footer style="margin-top:40px">
+Made with 💖 by Tobe — only for Popae
+</footer>
+
+</div>
+
+<div id="valentineBox">
+  <div class="popup">
+    <h2>Will you be my Valentine? 💘</h2><br>
+    <button onclick="yes()">YES 😍</button>
+    <button id="noBtn" onmouseover="runAway()">NO 🙈</button>
+  </div>
+</div>
+
+<script>
+
+/* TYPEWRITER */
+const text=`Hey Popae 🌸
+
+Since 20 August 2025,
+my world changed.
+
+Every smile of yours,
+every laugh,
+every moment...
+
+It’s all you 💖`;
+
+let i=0;
+function typeText(){
+  if(i<text.length){
+    typed.innerHTML+=text.charAt(i++);
+    setTimeout(typeText,40);
+  }
+}
+
+/* COUNT DAYS */
+const startDate = new Date("2025-08-20");
+function updateCountdown(){
+  const now = new Date();
+  const diff = now - startDate;
+  const days = Math.floor(diff/(1000*60*60*24));
+  countdown.innerHTML = `We’ve been talking for ${days} days 💞`;
+}
+updateCountdown();
+
+/* UNLOCK */
+function unlock(){
+  if(pass.value.toLowerCase()=="popae"){
+    lock.style.display="none";
+    main.style.display="block";
+    music.play();
+    typeText();
+    slideShow();
+    floating();
+  } else {
+    pass.style.border="2px solid red";
+  }
+}
+
+/* LOVE REASONS */
+const reasons=[
+"Because your smile melts me 🫠",
+"Because you glow differently ✨",
+"Because you’re my peace 💆🏽‍♂️",
+"Because your eyes are magic 👀💖",
+"Because you're my favorite person 💕"
+];
+function showReason(){
+  reasonText.innerHTML=reasons[Math.floor(Math.random()*reasons.length)];
+}
+
+/* LOVE METER */
+function loveMeter(val){
+  loveLevel.innerHTML="Love Level: "+val+"% 💖";
+}
+
+/* GALLERY */
+function showGallery(){
+  gallery.style.display="block";
+}
+let current=0;
+function slideShow(){
+  const images=document.querySelectorAll(".photos img");
+  images.forEach(img=>img.style.display="none");
+  current++;
+  if(current>images.length) current=1;
+  images[current-1].style.display="block";
+  setTimeout(slideShow,3000);
+}
+
+/* VALENTINE */
+function askValentine(){valentineBox.style.display="flex";}
+function yes(){
+  alert("I love you Popae forever 💖💋");
+  document.body.style.background="linear-gradient(135deg,#ff1493,#ff69b4)";
+}
+function runAway(){
+  noBtn.style.left=Math.random()*200+"px";
+  noBtn.style.top=Math.random()*100+"px";
+}
+
+/* FLOATING */
+function floating(){
+  setInterval(()=>{
+    let el=document.createElement("div");
+    el.className="floating";
+    el.innerHTML=Math.random()>0.5?"💖":"🌸";
+    el.style.left=Math.random()*100+"vw";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),7000);
+  },500);
+}
+
+/* SECRET LETTER */
+function loveLetter(){
+  alert("Popae... If loving you was a subject, I would graduate with distinction 💖");
+}
+
+/* KISS */
+function kiss(){
+  alert("Virtual kisses sent 💋💋💋");
+}
+
+/* WHATSAPP */
+function openWhatsApp(){
+  window.open("https://wa.me/26771824413?text=I%20loved%20it%20Popae%20💖","_blank");
+}
+
+</script>
+</body>
+</html>
